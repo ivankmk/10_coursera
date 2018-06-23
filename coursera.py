@@ -17,29 +17,18 @@ def get_courses_list(number_to_select=20):
 def get_course_info(course_slug):
     tree = urllib.request.urlopen(course_slug).read()
     soup = BeautifulSoup(tree, 'lxml')
-    try:
-        course_lang = soup.find('div', attrs={'class':
-                                              'rc-Language'}).get_text()
-    except AttributeError:
-        course_lang = 'No data'
-    try:
-        start_date = soup.find('div', attrs={'id':
-                                             'start-date-string'}).get_text()
-    except AttributeError:
-        start_date = 'No data'
-    try:
-        cnt_weeks = len(soup.find_all('div', attrs={'class':
-                                                    'week'}))
-    except AttributeError:
-        cnt_weeks = 'No data'
+    course_lang = soup.find('div', attrs={'class':
+                                          'rc-Language'}).get_text()
+    start_date = soup.find('div', attrs={'id':
+                                         'start-date-string'}).get_text()
+    course_name = soup.title.string.split('|')[0]
+
+    cnt_weeks = len(soup.find_all('div', attrs={'class':
+                                                'week'}))
     try:
         rating = soup.find('div', class_='ratings-text').text
     except AttributeError:
         rating = 'No data'
-    try:
-        course_name = soup.title.string.split('|')[0]
-    except AttributeError:
-        course_name = 'No data'
 
     return {
             'Course name': course_name,
